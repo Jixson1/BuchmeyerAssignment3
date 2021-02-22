@@ -9,8 +9,9 @@ var dx = 0;
 var dxLoc;
 var dy = -.76;
 var dyLoc;
-var vertices;
-var colors;
+
+let vertices;
+let colors;
 
 var direction = 1;
 var Xvelocity = .05;
@@ -30,24 +31,19 @@ window.onload = function init()
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(.9, .9, .9, 1.0);
 
+    vertices = [];
+    colors = [];
+
+    //Draw Stuff
+    drawSolidRectangle(vec2(.25, .25), vec2(-.25, .25), vec2(-.25, -.25), vec2(.25, -.25), vec3(1, .8, 0));
+    drawSolidRectangle(vec2(.2, -.1), vec2(-.2, -.1), vec2(-.2, -.15), vec2(.2, -.15), vec3(0, 0, 0));
+    drawSolidRectangle(vec2(.175, .1), vec2(.125, .1), vec2(.125, .05), vec2(.175, .05), vec3(0, 0, 0));
+    drawSolidRectangle(vec2(-.175, .1), vec2(-.125, .1), vec2(-.125, .05), vec2(-.175, .05), vec3(0, 0, 0));
+
+
     //  Load shaders and initialize attribute buffers
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
-
-    vertices = [
-        vec2(0, .25),
-        vec2(-.25, 0),
-        vec2(.25, 0),
-        vec2(0, -.25),
-    ];
-
-    colors = [
-        vec3(1,0,0),
-        vec3(0,1,0),
-        vec3(0,1,1),
-        vec3(1,0,1),
-    ];
-
 
     let cBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, cBuffer );
@@ -84,6 +80,37 @@ window.onload = function init()
     render();
 };
 
+//draws a solid colored triangle
+function drawSolidTriangle(pt0, pt1, pt2, color) {
+    //adds values to points and colors global variables
+    vertices.push(pt0);
+    vertices.push(pt1);
+    vertices.push(pt2);
+
+    colors.push(color);
+    colors.push(color);
+    colors.push(color);
+}
+
+//draws a solid colored rectangle by drawing 2 triangles
+function drawSolidRectangle(pt0, pt1, pt2, pt3, color) {
+    //adds values to points and colors global variables
+    vertices.push(pt0);
+    vertices.push(pt1);
+    vertices.push(pt2);
+
+    vertices.push(pt0);
+    vertices.push(pt2);
+    vertices.push(pt3);
+
+    colors.push(color);
+    colors.push(color);
+    colors.push(color);
+    colors.push(color);
+    colors.push(color);
+    colors.push(color);
+}
+
 
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -107,6 +134,6 @@ function render() {
     gl.uniform1f(dxLoc, dx);
     gl.uniform1f(dyLoc, dy);
 
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertices.length);
+    gl.drawArrays(gl.TRIANGLES, 0, vertices.length);
     requestAnimationFrame(render);
 }
