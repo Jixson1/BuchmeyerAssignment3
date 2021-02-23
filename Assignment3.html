@@ -28,7 +28,40 @@ main()
 }
 </script>
 
+<script id="vertex-shader-still" type="x-shader/x-vertex">
+    #version 300 es
+
+    in vec4 aPosition; 
+    in vec3 aColor;
+    out vec4 vColor;
+    
+    void
+    main()
+    {
+        gl_Position.x = aPosition.x;
+        gl_Position.y = aPosition.y;
+        gl_Position.z = 0.0;
+        gl_Position.w = 1.0;
+
+        vColor = vec4(aColor, 1.0);
+    }
+</script>
+
 <script id="fragment-shader" type="x-shader/x-fragment">
+    #version 300 es
+    precision mediump float;
+    
+    in vec4 vColor;
+    out vec4 fColor;
+    
+    void
+    main()
+    {
+        fColor = vColor;
+    }
+</script>
+
+<script id="fragment-shader-still" type="x-shader/x-fragment">
     #version 300 es
     precision mediump float;
     
