@@ -4,7 +4,31 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 <title>CS 147 Buchmeyer Assignment 3</title>
 
-<script id="vertex-shader" type="x-shader/x-vertex">
+<script id="mercury-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+in vec3 aColor;
+out vec4 vColor;
+uniform float utheta;
+uniform float udx;
+uniform float udy;
+void
+main()
+{
+    float s = sin(utheta);
+    float c = cos(utheta);
+    gl_Position.x = -s*aPosition.y + c*aPosition.x + udx;
+    gl_Position.y =  s*aPosition.x + c*aPosition.y + udy;
+
+    gl_Position.z = 0.0;
+    gl_Position.w = 1.0;
+    vColor = vec4(aColor, 1.0);
+
+}
+</script>
+
+<script id="venus-shader" type="x-shader/x-vertex">
 #version 300 es
 
 in vec4 aPosition;
@@ -25,6 +49,164 @@ main()
     gl_Position.z = 0.0;
     gl_Position.w = 1.0;
     vColor = vec4(aColor, 1.0);
+
+    
+}
+</script>
+
+<script id="earth-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+in vec3 aColor;
+out vec4 vColor;
+uniform float utheta;
+uniform float udx;
+uniform float udy;
+
+void
+main()
+{
+    float s = sin(utheta);
+    float c = cos(utheta);
+    gl_Position.x = -s*aPosition.y + c*aPosition.x + udx;
+    gl_Position.y =  s*aPosition.x + c*aPosition.y + udy;
+
+    gl_Position.z = 0.0;
+    gl_Position.w = 1.0;
+    vColor = vec4(aColor, 1.0);
+
+    
+}
+</script>
+
+<script id="mars-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+in vec3 aColor;
+out vec4 vColor;
+uniform float utheta;
+uniform float udx;
+uniform float udy;
+
+void
+main()
+{
+    float s = sin(utheta);
+    float c = cos(utheta);
+    gl_Position.x = -s*aPosition.y + c*aPosition.x + udx;
+    gl_Position.y =  s*aPosition.x + c*aPosition.y + udy;
+
+    gl_Position.z = 0.0;
+    gl_Position.w = 1.0;
+    vColor = vec4(aColor, 1.0);
+
+    
+}
+</script>
+
+<script id="jupiter-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+in vec3 aColor;
+out vec4 vColor;
+uniform float utheta;
+uniform float udx;
+uniform float udy;
+
+void
+main()
+{
+    float s = sin(utheta);
+    float c = cos(utheta);
+    gl_Position.x = -s*aPosition.y + c*aPosition.x + udx;
+    gl_Position.y =  s*aPosition.x + c*aPosition.y + udy;
+
+    gl_Position.z = 0.0;
+    gl_Position.w = 1.0;
+    vColor = vec4(aColor, 1.0);
+
+    
+}
+</script>
+
+<script id="saturn-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+in vec3 aColor;
+out vec4 vColor;
+uniform float utheta;
+uniform float udx;
+uniform float udy;
+
+void
+main()
+{
+    float s = sin(utheta);
+    float c = cos(utheta);
+    gl_Position.x = -s*aPosition.y + c*aPosition.x + udx;
+    gl_Position.y =  s*aPosition.x + c*aPosition.y + udy;
+
+    gl_Position.z = 0.0;
+    gl_Position.w = 1.0;
+    vColor = vec4(aColor, 1.0);
+
+    
+}
+</script>
+
+<script id="uranus-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+in vec3 aColor;
+out vec4 vColor;
+uniform float utheta;
+uniform float udx;
+uniform float udy;
+
+void
+main()
+{
+    float s = sin(utheta);
+    float c = cos(utheta);
+    gl_Position.x = -s*aPosition.y + c*aPosition.x + udx;
+    gl_Position.y =  s*aPosition.x + c*aPosition.y + udy;
+
+    gl_Position.z = 0.0;
+    gl_Position.w = 1.0;
+    vColor = vec4(aColor, 1.0);
+
+    
+}
+</script>
+
+<script id="neptune-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+in vec3 aColor;
+out vec4 vColor;
+uniform float utheta;
+uniform float udx;
+uniform float udy;
+
+void
+main()
+{
+    float s = sin(utheta);
+    float c = cos(utheta);
+    gl_Position.x = -s*aPosition.y + c*aPosition.x + udx;
+    gl_Position.y =  s*aPosition.x + c*aPosition.y + udy;
+
+    gl_Position.z = 0.0;
+    gl_Position.w = 1.0;
+    vColor = vec4(aColor, 1.0);
+
+    
 }
 </script>
 
@@ -61,20 +243,6 @@ main()
     }
 </script>
 
-<script id="fragment-shader-still" type="x-shader/x-fragment">
-    #version 300 es
-    precision mediump float;
-    
-    in vec4 vColor;
-    out vec4 fColor;
-    
-    void
-    main()
-    {
-        fColor = vColor;
-    }
-</script>
-
 <script type="text/javascript" src="../Common/initShaders.js"></script>
 <script type="text/javascript" src="../Common/MVnew.js"></script>
 <script type="text/javascript" src="Assignment3.js"></script>
@@ -82,12 +250,13 @@ main()
 
 <body>
  
-<canvas id="gl-canvas" width="512" height="512">
+<canvas id="gl-canvas" width="900" height="900">
 Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
 <div>
-    Horizontal Velocity <input id="slider" type="range"
-    min="0.0" max="0.1" step="0.005" value="0.05">
+    Revolution Speed <input id="slider" type="range"
+    min="100" max="1000" step="100" value="500">
 </div> 
+<button id="Direction">Change Revolution Direction</button>
 </body>
 </html>
