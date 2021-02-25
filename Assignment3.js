@@ -30,9 +30,12 @@ var programStars;
 
 //Initializing planet array
 let planetArr;
+
+//Initializing variables to manipulate solar system
 var sunRadius = .1;
 var sunPosX = 0;
 var sunPosY = 0;
+var scaleMod = 1;
 
 //Establishing planet object
 function planet(angle, speed, orbitRadius, radius, rotation, color) {
@@ -44,6 +47,7 @@ function planet(angle, speed, orbitRadius, radius, rotation, color) {
     this.color = color;
 }
 
+//Processing keyboard input
 window.onkeydown = function(event) {
     var key = String.fromCharCode(event.keyCode);
     switch (key) {
@@ -70,10 +74,10 @@ window.onload = function init()
 {   
     //Display initial slider label
     displaySliderLabel('timeSpeedSlider');
-    displaySliderLabel('sunSizeSlider');
+    displaySliderLabel('scaleSlider');
     
     planetArr = [];
-    //Initialize planets
+    //Initialize planet objects
     let mercury = new planet(0, ((2*Math.PI)/121), .23, (sunRadius / 285.41 * 10), .00017, vec3(.7, .7, .7));
     let venus = new planet(0, ((2*Math.PI)/308), .27, (sunRadius / 115.08 * 5), .00004, vec3(.9, .7, .7));
     let earth = new planet(0, ((2*Math.PI)/500), .31, (sunRadius / 109.32 * 5), .01, vec3(.5, .5, 1));
@@ -82,7 +86,9 @@ window.onload = function init()
     let saturn = new planet(0, ((2*Math.PI)/14500), .7, (sunRadius / 11.96 * 5), .022, vec3(1, 1, .3));
     let uranus = new planet(0, ((2*Math.PI)/42000), .85, (sunRadius / 27.46 * 5), .014, vec3(.55, .55, 1));
     let neptune = new planet(0, ((2*Math.PI)/82500), .95, (sunRadius / 28.28 * 5), .015, vec3(.3, .3, 1));
+    //"Not really a planet, but making it a planet makes my life easier" - Jackson
     let sun = new planet(0, 0, 0, sunRadius, .00041, vec3(1, 1, .3));
+    //Pushing planet objects onto the planet array
     planetArr.push(mercury);
     planetArr.push(venus);
     planetArr.push(earth);
@@ -93,6 +99,7 @@ window.onload = function init()
     planetArr.push(neptune);
     planetArr.push(sun);
     
+    //Setting up canvas and other WebGL stuff, you know the drill
     canvas = document.getElementById( "gl-canvas" );
 
     gl = canvas.getContext('webgl2');
@@ -102,6 +109,7 @@ window.onload = function init()
     //  Configure WebGL
     //
     gl.viewport(0, 0, canvas.width, canvas.height);
+    //Initializing the endless black abyss that is outerspace
     gl.clearColor(0, 0, 0, 1.0);
 
     verticesMov = [];
@@ -159,19 +167,24 @@ window.onload = function init()
         displaySliderLabel('timeSpeedSlider');
     }
     
-    //Slider to manipulate sun size
-    document.getElementById("sunSizeSlider").onchange = function(event) {
+    //Slider to manipulate scale of solar system
+    document.getElementById("scaleSlider").onchange = function(event) {
         for (var i = 0; i < planetArr.length; i++) {
+            planetArr[i].radius /= scaleMod;
             drawPlanet(i);
         }
-        sunRadius = parseFloat(event.target.value);
-        displaySliderLabel('sunSizeSlider');
+        scaleMod = parseFloat(event.target.value);
+        for (var i = 0; i < planetArr.length; i++) {
+            planetArr[i].radius *= scaleMod;
+            drawPlanet(i);
+        }
+        displaySliderLabel('scaleSlider');
     }
 
     render();
 };
 
-//Function for displaying slider labels (found here: https://stackoverflow.com/questions/29103818/how-can-i-retrieve-and-display-slider-range-value)
+//Function for displaying slider labels (based off code found here: https://stackoverflow.com/questions/29103818/how-can-i-retrieve-and-display-slider-range-value)
 function displaySliderLabel(sliderName) {
     var val = document.getElementById(sliderName).value;
     document.getElementById(sliderName+'Output').innerHTML = val;
@@ -224,16 +237,16 @@ function drawPlanet(i) {
         vec2(planetArr[i].radius, -planetArr[i].radius),
         planetArr[i].color, true, i);
     } else if (i == 8) { // Special Case: The Sun
-        drawSolidRectangle(vec2(sunRadius, sunRadius),
-        vec2(-sunRadius, sunRadius),
-        vec2(-sunRadius, -sunRadius),
-        vec2(sunRadius, -sunRadius),
+        drawSolidRectangle(vec2(planetArr[i].radius, planetArr[i].radius),
+        vec2(-planetArr[i].radius, planetArr[i].radius),
+        vec2(-planetArr[i].radius, -planetArr[i].radius),
+        vec2(planetArr[i].radius, -planetArr[i].radius),
         vec3(1, 1, .3), true, i);
 
-        drawSolidRectangle(vec2(sunRadius-.02, sunRadius-.02),
-        vec2(-(sunRadius-.02), sunRadius-.02),
-        vec2(-(sunRadius-.02), -(sunRadius-.02)),
-        vec2(sunRadius-.02, -(sunRadius-.02)),
+        drawSolidRectangle(vec2(planetArr[i].radius-.02, planetArr[i].radius-.02),
+        vec2(-(planetArr[i].radius-.02), planetArr[i].radius-.02),
+        vec2(-(planetArr[i].radius-.02), -(planetArr[i].radius-.02)),
+        vec2(planetArr[i].radius-.02, -(planetArr[i].radius-.02)),
         vec3(1, 1, 1), true, i);
     } else { // The rest of the planets
         drawSolidRectangle(vec2(planetArr[i].radius, planetArr[i].radius),
@@ -301,8 +314,8 @@ function render() {
         //Revolving/Circular Movement 
         if (i != 8) {
             planetArr[i].angle += planetArr[i].speed * direction;
-            dx[i] = Math.cos(planetArr[i].angle) * planetArr[i].orbitRadius + sunPosX + (sunRadius - .1);
-            dy[i] = Math.sin(planetArr[i].angle) * planetArr[i].orbitRadius + sunPosY + (sunRadius - .1);
+            dx[i] = Math.cos(planetArr[i].angle) * (planetArr[i].orbitRadius*scaleMod) + sunPosX;
+            dy[i] = Math.sin(planetArr[i].angle) * (planetArr[i].orbitRadius*scaleMod) + sunPosY;
         }
         dx[8] = sunPosX;
         dy[8] = sunPosY;
