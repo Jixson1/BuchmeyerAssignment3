@@ -152,7 +152,7 @@ main()
 
     gl_Position.z = 0.0;
     gl_Position.w = 1.0;
-    vColor = vec4(aColor, 1.0);
+    vColor = vec4(aColor, 1);
 
     
 }
@@ -210,7 +210,35 @@ main()
 }
 </script>
 
-<script id="vertex-shader-still" type="x-shader/x-vertex">
+<script id="sun-shader" type="x-shader/x-vertex">
+#version 300 es
+
+in vec4 aPosition;
+in vec3 aColor;
+out vec4 vColor;
+uniform float utheta;
+uniform float udx;
+uniform float udy;
+
+void
+main()
+{
+    float s = sin(utheta);
+    float c = cos(utheta);
+    gl_Position.x = -s*aPosition.y + c*aPosition.x + udx;
+    gl_Position.y =  s*aPosition.x + c*aPosition.y + udy;
+
+    gl_Position.z = 0.0;
+    gl_Position.w = 1.0;
+    vColor = vec4(aColor, 1.0);
+
+    
+}
+</script>
+
+
+
+<script id="stars-shader" type="x-shader/x-vertex">
     #version 300 es
 
     in vec4 aPosition; 
@@ -225,7 +253,7 @@ main()
         gl_Position.z = 0.0;
         gl_Position.w = 1.0;
 
-        vColor = vec4(aColor, 1.0);
+        vColor = vec4(aColor, 1);
     }
 </script>
 
@@ -253,10 +281,15 @@ main()
 <canvas id="gl-canvas" width="900" height="900">
 Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
+
 <div>
-    Revolution Speed <input id="slider" type="range"
-    min="100" max="1000" step="100" value="500">
+    <button id="Direction">Change Revolution Direction</button>
+    Time Speed Multiplier: <output id="timeSpeedSliderOutput"></output> <input id="timeSpeedSlider" type="range"
+    min=".5" max="10" step=".5" value="1">
+    Sun Size : <output id="sunSizeSliderOutput"></output> <input id="sunSizeSlider" type="range"
+    min=".5" max="1.5" step=".5" value="1">
+    
 </div> 
-<button id="Direction">Change Revolution Direction</button>
+
 </body>
 </html>
