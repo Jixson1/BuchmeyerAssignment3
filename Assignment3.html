@@ -284,7 +284,11 @@ Oops ... your browser doesn't support the HTML5 canvas element
 
 <div>
     WebGL 2D Model of the Solar System by Jackson Buchmeyer<br>
-    Use the WASD keys to move the solar system around! Background stars are randomized on each load of the page.<br>
+    Use the WASD keys to move the solar system around! The background stars are randomized on each reload of the page.<br><br>
+    The revolution and rotation speed of the planets are accurately calculated relative to the earth's revolution and rotation.<br>
+    The size of each planet is roughly accurate relative to the others, but not the sun.<br>
+    The size of all planets are upscaled because otherwise smaller planets like Mercury and Mars would be way too small to see.<br>
+    (Mercury is upscaled twice the amount that the other planets are because it is ridiculously small on this scale)<br>
 
     <button id="Direction">Change Revolution & Rotation Direction</button>
 
