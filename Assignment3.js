@@ -173,6 +173,10 @@ window.onload = function init()
     //Initializing Loc arrays and drawing planets
     for (var i = 0; i < planetArr.length; i++) {
         drawPlanet(i);
+        thetaLoc[i] = gl.getUniformLocation(program[i], "utheta");
+        dxLoc[i] = gl.getUniformLocation(program[i], "udx");
+        dyLoc[i] = gl.getUniformLocation(program[i], "udy");
+        theta[i] = 0;
     }
 
     //Initializing program for stars (static visuals)
@@ -304,10 +308,6 @@ function drawPlanet(i) {
         vec2(planetArr[i].radius, -planetArr[i].radius),
         planetArr[i].color, true, i);
     }
-    thetaLoc[i] = gl.getUniformLocation(program[i], "utheta");
-    dxLoc[i] = gl.getUniformLocation(program[i], "udx");
-    dyLoc[i] = gl.getUniformLocation(program[i], "udy");
-    theta[i] = 0;
 }
 
 
