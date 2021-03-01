@@ -41,6 +41,7 @@ var scaleMod = 1;
 let colorsDefault = [];
 let colorsPride = [];
 let colorsUSA = [];
+let colorsChoice = colorsDefault;
 
 //Establishing planet object
 function planet(angle, speed, orbitRadius, radius, rotation, color) {
@@ -83,19 +84,28 @@ window.onload = function init()
 
     //Initialize color option arrays
     colorsDefault.push(vec3(.7, .7, .7), vec3(.9, .7, .7), vec3(.5, .5, 1), vec3(1, .2, .2), vec3(.824, .709, .549), vec3(1, 1, .3), vec3(.55, .55, 1), vec3(.3, .3, 1), vec3(1, 1, .3));
+    colorsDefault.push(vec3(1, .5, 0), vec3(1, 1, 1)); // Index 9 and 10 refer to Saturn ring color and sun inner color
+
+    colorsPride.push(vec3(1, 1, .3), vec3(0, 1, 0), vec3(0, 0 , 1), vec3(.5, 0, 1), vec3(1, 0, 0), vec3(1, 1, .3), vec3(0, 1, 0), vec3(0, 0, 1), vec3(1, 0, 0));
+    colorsPride.push(vec3(1, .5, 0), vec3(1, .5, 0)); 
+
+    colorsUSA.push(vec3(0, 0, 1), vec3(1, 0, 0), vec3(1, 1, 1), vec3(0, 0, 1), vec3(1, 0, 0), vec3(0, 0, 1), vec3(1, 0, 0), vec3(1, 1, 1), vec3(1, 0, 0));
+    colorsUSA.push(vec3(1, 1, 1), vec3(1, 1, 1));
+
+    colorsChoice = colorsDefault;
     
     planetArr = [];
     //Initialize planet objects
-    let mercury = new planet(0, ((2*Math.PI)/121), .23, (sunRadius / 285.41 * 10), .00017, vec3(.7, .7, .7));
-    let venus = new planet(0, ((2*Math.PI)/308), .27, (sunRadius / 115.08 * 5), .00004, vec3(.9, .7, .7));
-    let earth = new planet(0, ((2*Math.PI)/500), .31, (sunRadius / 109.32 * 5), .01, vec3(.5, .5, 1));
-    let mars = new planet(0, ((2*Math.PI)/941), .35, (sunRadius / 205.46 * 5), .0097, vec3(1, .2, .2));
-    let jupiter = new planet(0, ((2*Math.PI)/6000), .5, (sunRadius / 9.96 * 5), .024, vec3(.824, .709, .549));
-    let saturn = new planet(0, ((2*Math.PI)/14500), .7, (sunRadius / 11.96 * 5), .022, vec3(1, 1, .3));
-    let uranus = new planet(0, ((2*Math.PI)/42000), .85, (sunRadius / 27.46 * 5), .014, vec3(.55, .55, 1));
-    let neptune = new planet(0, ((2*Math.PI)/82500), .95, (sunRadius / 28.28 * 5), .015, vec3(.3, .3, 1));
+    let mercury = new planet(0, ((2*Math.PI)/121), .23, (sunRadius / 285.41 * 10), .00017, colorsChoice[0]);
+    let venus = new planet(0, ((2*Math.PI)/308), .27, (sunRadius / 115.08 * 5), .00004, colorsChoice[1]);
+    let earth = new planet(0, ((2*Math.PI)/500), .31, (sunRadius / 109.32 * 5), .01, colorsChoice[2]);
+    let mars = new planet(0, ((2*Math.PI)/941), .35, (sunRadius / 205.46 * 5), .0097, colorsChoice[3]);
+    let jupiter = new planet(0, ((2*Math.PI)/6000), .5, (sunRadius / 9.96 * 5), .024, colorsChoice[4]);
+    let saturn = new planet(0, ((2*Math.PI)/14500), .7, (sunRadius / 11.96 * 5), .022, colorsChoice[5]);
+    let uranus = new planet(0, ((2*Math.PI)/42000), .85, (sunRadius / 27.46 * 5), .014, colorsChoice[6]);
+    let neptune = new planet(0, ((2*Math.PI)/82500), .95, (sunRadius / 28.28 * 5), .015, colorsChoice[7]);
     //"Not really a planet, but making it a planet makes my life easier" - Jackson
-    let sun = new planet(0, 0, 0, sunRadius, .00041, vec3(1, 1, .3));
+    let sun = new planet(0, 0, 0, sunRadius, .00041, colorsChoice[8]);
     //Pushing planet objects onto the planet array
     planetArr.push(mercury);
     planetArr.push(venus);
@@ -189,6 +199,25 @@ window.onload = function init()
         displaySliderLabel('scaleSlider');
     }
 
+    //Menu to manipulate color themes
+    document.getElementById("ColorSwap").onclick = function(event) {
+        switch(event.target.index) {
+            case 0:
+                colorsChoice = colorsDefault;
+                break;
+            case 1:
+                colorsChoice = colorsPride;
+                break;
+            case 2:
+                colorsChoice = colorsUSA;
+                break;
+        }
+        for (var i = 0; i < planetArr.length; i++) {
+            planetArr[i].color = colorsChoice[i];
+            drawPlanet(i);
+        }
+    }
+
     render();
 };
 
@@ -231,7 +260,7 @@ function drawPlanet(i) {
         vec2(-(planetArr[i].radius+.02), planetArr[i].radius+.02), 
         vec2(-(planetArr[i].radius+.02), -(planetArr[i].radius+.02)), 
         vec2(planetArr[i].radius+.02, -(planetArr[i].radius+.02)),
-        vec3(1, .3, 0), true, i);
+        colorsChoice[9], true, i);
 
         drawSolidRectangle(vec2(planetArr[i].radius+.01, planetArr[i].radius+.01),
         vec2(-(planetArr[i].radius+.01), planetArr[i].radius+.01), 
@@ -249,13 +278,13 @@ function drawPlanet(i) {
         vec2(-planetArr[i].radius, planetArr[i].radius),
         vec2(-planetArr[i].radius, -planetArr[i].radius),
         vec2(planetArr[i].radius, -planetArr[i].radius),
-        vec3(1, 1, .3), true, i);
+        planetArr[i].color, true, i);
 
         drawSolidRectangle(vec2(planetArr[i].radius-.02, planetArr[i].radius-.02),
         vec2(-(planetArr[i].radius-.02), planetArr[i].radius-.02),
         vec2(-(planetArr[i].radius-.02), -(planetArr[i].radius-.02)),
         vec2(planetArr[i].radius-.02, -(planetArr[i].radius-.02)),
-        vec3(1, 1, 1), true, i);
+        colorsChoice[10], true, i);
     } else { // The rest of the planets
         drawSolidRectangle(vec2(planetArr[i].radius, planetArr[i].radius),
         vec2(-planetArr[i].radius, planetArr[i].radius), 
