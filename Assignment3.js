@@ -37,6 +37,11 @@ var sunPosX = 0;
 var sunPosY = 0;
 var scaleMod = 1;
 
+//Initializing color option arrays
+let colorsDefault = [];
+let colorsPride = [];
+let colorsUSA = [];
+
 //Establishing planet object
 function planet(angle, speed, orbitRadius, radius, rotation, color) {
     this.angle = angle;
@@ -75,6 +80,9 @@ window.onload = function init()
     //Display initial slider label
     displaySliderLabel('timeSpeedSlider');
     displaySliderLabel('scaleSlider');
+
+    //Initialize color option arrays
+    colorsDefault.push(vec3(.7, .7, .7), vec3(.9, .7, .7), vec3(.5, .5, 1), vec3(1, .2, .2), vec3(.824, .709, .549), vec3(1, 1, .3), vec3(.55, .55, 1), vec3(.3, .3, 1), vec3(1, 1, .3));
     
     planetArr = [];
     //Initialize planet objects
@@ -322,7 +330,7 @@ function render() {
         gl.uniform1f(dxLoc[i], dx[i]);
         gl.uniform1f(dyLoc[i], dy[i]);
         //Rotation
-        theta[i] += planetArr[i].rotation;
+        theta[i] += planetArr[i].rotation * direction;
         gl.uniform1f(thetaLoc[i], theta[i]);
 
         gl.drawArrays(gl.TRIANGLES, 0, verticesMov[i].length);
