@@ -278,16 +278,22 @@ main()
 
 <body>
  
-<canvas id="gl-canvas" width="900" height="900">
+<canvas id="gl-canvas" width="800" height="800">
 Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
 
 <div>
+    WebGL 2D Model of the Solar System by Jackson Buchmeyer<br>
+    Use the WASD keys to move the solar system around! Background stars are randomized on each load of the page.<br>
+
     <button id="Direction">Change Revolution & Rotation Direction</button>
+
     Time Speed Multiplier: <output id="timeSpeedSliderOutput"></output> <input id="timeSpeedSlider" type="range"
     min=".5" max="10" step=".5" value="1">
+
     Scale: <output id="scaleSliderOutput"></output> <input id="scaleSlider" type="range"
     min=".5" max="4" step=".5" value="1">
+
     Color Themes:
     <select id="ColorSwap" size="3">
         <option value="0">Default</option>

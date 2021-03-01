@@ -1,3 +1,14 @@
+// Author: Jackson Buchmeyer
+// Date: March 1st, 2021
+// Description: This program simulates a 2D representation of our solar system. The user can manipulate the speed and direction of the planets,
+//              change the colors from a few hard-coded color themes, and change the scale of the solar system. The user can also use the WASD keys to
+//              move the entire solar system around the canvas.
+//
+// Proposed Points: I believe my assignment submission is worth 10/10 points as I have implemented all of the requirements given in the assignment rubric.
+//                  My program includes the following from the rubric: animation, at least 2 colors, 1 button that manipulates the direction of the planets,
+//                  a slider that changes the time speed of the solar system, a slider that changes the scale of the solar system, a menu that manipulates
+//                  the colors of the solar system, 4 key presses that allow the user to move the solar system around the canvas, and at least 2 vertex shaders.
+
 "use strict";
 
 var canvas;
@@ -138,6 +149,7 @@ window.onload = function init()
     //Time to draw stuff
 
     //Stars - time to light up the sky
+    //On each load of the HTML file, the placement of the stars is different
     let starSize = .01
     for (let i = 0; i < 150; i++) {
         let x = Math.random()*2 - 1.0; //random number between -1 and 1
@@ -302,7 +314,7 @@ function drawPlanet(i) {
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    //Starting the setup for static visual drawing
+    //Starting the setup for static visual drawing (the stars)
 
     gl.useProgram(programStars);
     
@@ -322,7 +334,7 @@ function render() {
     gl.vertexAttribPointer(colorLocStars, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(colorLocStars);
 
-    //Drawing static visuals
+    //Drawing static visuals (stars)
     gl.drawArrays(gl.TRIANGLES, 0, verticesStars.length);
 
     //Rendering the planets and the sun
